@@ -206,8 +206,10 @@ class _MyHomePageState extends State<MyHomePage> {
         painter: DashedCirclePainter(),
         child: Center(
           child: Text(
-            emotion.isNotEmpty ? emotion : 'here!',
-            style: TextStyle(fontSize: 15), // 'here!' 문구의 폰트 크기를 줄임
+            emotion.isNotEmpty ? emotion : 'Here!',
+            style: TextStyle(
+              fontSize: emotion.isNotEmpty ? width * 0.6 : 15, // 드랍된 감정 이모티콘일 때만 크기 증가
+            ),
           ),
         ),
       ),
