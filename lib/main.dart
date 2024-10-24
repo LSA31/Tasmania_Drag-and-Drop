@@ -26,11 +26,17 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<String> emotions = ['🙂', '😢', '😡', '😂', '😱', '😍', '😴', '🤢'];
 
-  // 드롭된 감정 이모티콘을 저장할 변수
+  // 드롭된 감정 이모티콘을 저장할 변수와 외곽선 색상 변수
   String droppedEmotion1 = '';
   String droppedEmotion2 = '';
   String droppedEmotion3 = '';
   String droppedEmotion4 = '';
+
+  // 외곽선이 실선으로 바뀌었는지 확인하는 플래그
+  bool isDropped1 = false;
+  bool isDropped2 = false;
+  bool isDropped3 = false;
+  bool isDropped4 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,53 +59,65 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: emotions.map((emotion) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Draggable<String>(
-                    data: emotion,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFF7A9EDA), // 감정 이모티콘의 색상
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        emotion,
-                        style: TextStyle(fontSize: 40),
-                      ),
-                    ),
-                    feedback: Material(
-                      color: Colors.transparent,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xFF7A9EDA), // 감정 이모티콘의 색상
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          emotion,
-                          style: TextStyle(fontSize: 40),
-                        ),
-                      ),
-                    ),
-                    childWhenDragging: Opacity(
-                      opacity: 0.5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xFF7A9EDA), // 감정 이모티콘의 색상
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          emotion,
-                          style: TextStyle(fontSize: 40),
-                        ),
-                      ),
-                    ),
+              children: [
+                // Emotion Icon 문구 추가
+                Text(
+                  'Emotion Icons',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF7A9EDA),
                   ),
-                );
-              }).toList(),
+                ),
+                SizedBox(height: 10), // 문구와 감정 이모티콘 사이 간격
+                ...emotions.map((emotion) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Draggable<String>(
+                      data: emotion,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xFF7A9EDA), // 감정 이모티콘의 색상
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          emotion,
+                          style: TextStyle(fontSize: 40),
+                        ),
+                      ),
+                      feedback: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFF7A9EDA), // 감정 이모티콘의 색상
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            emotion,
+                            style: TextStyle(fontSize: 40),
+                          ),
+                        ),
+                      ),
+                      childWhenDragging: Opacity(
+                        opacity: 0.5,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFF7A9EDA), // 감정 이모티콘의 색상
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            emotion,
+                            style: TextStyle(fontSize: 40),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ],
             ),
           ),
           // 배경 이미지 및 드래그 앤 드롭 영역
@@ -132,10 +150,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       onAccept: (data) {
                         setState(() {
                           droppedEmotion1 = data;
+                          isDropped1 = true; // 드랍된 후 플래그 변경
                         });
                       },
                       builder: (context, candidateData, rejectedData) {
-                        return _buildEmotionCircle(droppedEmotion1, 50, 50); // 작은 동그라미
+                        return _buildEmotionCircle(droppedEmotion1, 50, 50, isDropped1); // 작은 동그라미
                       },
                     ),
                   ),
@@ -147,10 +166,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       onAccept: (data) {
                         setState(() {
                           droppedEmotion2 = data;
+                          isDropped2 = true; // 드랍된 후 플래그 변경
                         });
                       },
                       builder: (context, candidateData, rejectedData) {
-                        return _buildEmotionCircle(droppedEmotion2, 70, 70); // 큰 동그라미
+                        return _buildEmotionCircle(droppedEmotion2, 70, 70, isDropped2); // 큰 동그라미
                       },
                     ),
                   ),
@@ -162,10 +182,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       onAccept: (data) {
                         setState(() {
                           droppedEmotion3 = data;
+                          isDropped3 = true; // 드랍된 후 플래그 변경
                         });
                       },
                       builder: (context, candidateData, rejectedData) {
-                        return _buildEmotionCircle(droppedEmotion3, 80, 80); // 큰 동그라미
+                        return _buildEmotionCircle(droppedEmotion3, 80, 80, isDropped3); // 큰 동그라미
                       },
                     ),
                   ),
@@ -177,10 +198,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       onAccept: (data) {
                         setState(() {
                           droppedEmotion4 = data;
+                          isDropped4 = true; // 드랍된 후 플래그 변경
                         });
                       },
                       builder: (context, candidateData, rejectedData) {
-                        return _buildEmotionCircle(droppedEmotion4, 70, 70); // 큰 동그라미
+                        return _buildEmotionCircle(droppedEmotion4, 70, 70, isDropped4); // 큰 동그라미
                       },
                     ),
                   ),
@@ -194,22 +216,32 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // 점선 외곽선이 있는 원형 위젯
-  Widget _buildEmotionCircle(String emotion, double width, double height) {
+  Widget _buildEmotionCircle(String emotion, double width, double height, bool isDropped) {
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
         color: Colors.white, // 원형 안에 흰색 배경 추가
         shape: BoxShape.circle,
+        border: isDropped
+            ? Border.all(color: Colors.red, width: 2) // 드랍 후 빨간 실선
+            : Border.all(color: Colors.transparent, width: 0), // 드랍 전 점선
       ),
-      child: CustomPaint(
-        painter: DashedCirclePainter(),
+      child: isDropped
+          ? Center(
+        child: Text(
+          emotion.isNotEmpty ? emotion : 'Here!',
+          style: TextStyle(
+            fontSize: width * 0.6, // 드랍된 감정 이모티콘일 때만 크기 증가
+          ),
+        ),
+      )
+          : CustomPaint(
+        painter: DashedCirclePainter(), // 드랍 전 점선
         child: Center(
           child: Text(
             emotion.isNotEmpty ? emotion : 'Here!',
-            style: TextStyle(
-              fontSize: emotion.isNotEmpty ? width * 0.6 : 15, // 드랍된 감정 이모티콘일 때만 크기 증가
-            ),
+            style: TextStyle(fontSize: 15), // 드랍 전 'Here!' 문구 폰트 크기
           ),
         ),
       ),
